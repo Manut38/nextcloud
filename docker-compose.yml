@@ -6,9 +6,9 @@ services:
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW 
     restart: always
     volumes:
-      - /srv/docker/nextcloud_db/:/var/lib/mysql
+      - {MARIADB_DATA}:/var/lib/mysql
     environment:
-      - MYSQL_RANDOM_ROOT_PASSWORD=true
+      - MARIADB_RANDOM_ROOT_PASSWORD=true
     env_file:
       - db.env
 
@@ -17,15 +17,13 @@ services:
     restart: always
 
   app:
-    build: ./nextcloud_app
+    build: .
     restart: always
     volumes:
-      - /srv/nextcloud/:/var/www/html/
+      - {NEXTCLOUD_DATA}:/var/www/html/
     environment:
-      - MYSQL_HOST=db
+      - MARIADB_HOST=db
       - REDIS_HOST=redis
-      - PHP_MEMORY_LIMIT=1024M
-      - PHP_UPLOAD_LIMIT=5000M
     ports:
       - 9005:9000
     env_file:

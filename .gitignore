@@ -1,1 +1,3 @@
 *.env
+nextcloud_data
+db_data
